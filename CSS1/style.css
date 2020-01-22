@@ -2,19 +2,70 @@ ul.nav-bar {
     list-style-type: none;
     margin: 0;
     padding: 0;
+    overflow: hidden;
+    background-color: #111166;
 }
 
 li.nav-item {
     float: left;
 }
 
-li.nav_item a {
+li.nav-item a {
     display: block;
-    padding: 8px;
-    background-color: #111166;
     color: #eeeeff;
+    text-align: center;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-size: 24px;
+    width: 100px;
+    padding: 8px;
+    text-decoration: none;
 }
 
-li.nav_item a:hover {
+li.nav-item a:hover {
     background-color: #555599;
+}
+
+li.nav-item a.nav-active {
+    background-color: #333377;
+}
+
+div#content {
+    max-width: 580px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    margin: 52px 0;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-size: 48px;
+}
+
+h2 {
+    text-align: center;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-size: 32px;
+}
+
+p {
+    text-align: center;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-size: 24px;
+}
+
+ul {
+    list-style-type: none;
+    padding-inline-start: 0;
+}
+
+img {
+    display: block;
+    margin: 0 auto;
+}
+
+hr {
+    background-color: #111166;
+    height: 4px;
+    border-style: none;
+    margin: 36px 0;
 }
