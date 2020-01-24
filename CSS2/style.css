@@ -1,0 +1,170 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+body {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    background: #eeeeff;
+}
+
+h1 {
+    font-size: 40px;
+    color: #ffffff;
+    text-align: center;
+}
+
+h2 {
+    text-align: center;
+    font-size: 40px;
+    margin: 10px 0 30px;
+}
+
+h3 {
+    text-align: center;
+    font-size: 32px;
+    margin: 10px 0 20px;
+}
+
+p {
+    text-align: center;
+    font-size: 24px;
+    margin: 10px 0;
+}
+
+hr {
+    background-color: #111166;
+    height: 4px;
+    border-style: none;
+    margin: 36px 0;
+}
+
+
+
+.container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    width: 100%;
+    padding: 20px;
+}
+
+.header-container {
+    background: #111166;
+}
+
+.header {
+    width: 800px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: flex-start;
+}
+
+.nav {
+    list-style-type: none;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: felx-end;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+.nav li a {
+    display: block;
+    text-decoration: none;
+    color: #ffffff;
+    text-align: center;
+    font-size: 24px;
+    border-radius: 10px;
+    width: 100px;
+    padding: 8px;
+    background: none;
+}
+
+.nav li a:link,
+.nav li a:visited {
+    background: none;
+}
+
+.nav li a:hover,
+.nav li a:active {
+    background: #555599;
+}
+
+.nav li a.nav-current {
+    background: #333377;
+}
+
+
+
+.content-container {
+    background: #eeeeff;
+}
+
+.content {
+    width: 800px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.window {
+    background: #555599;
+    border-radius: 20px;
+    padding: 20px;
+
+    width: 260px;
+    
+    box-shadow: 0 0 12px gray;
+}
+
+.window img {
+    display: block;
+    margin: 0 auto;
+}
+
+
+
+@media only screen and (min-width: 401px) {
+    .nav {
+        flex-direction: row;
+        align-content: flex-end;
+    }
+
+    .nav li a {
+        margin-right: 20px;
+    }
+
+    .nav li:last-of-type a {
+        margin-right: 0;
+    }
+}
+
+
+
+@media only screen and (min-width: 401px) and (max-width: 800px) {
+    .nav {
+        justify-content: center;
+    }
+}
+
+
+
+@media only screen and (min-width: 801px) {
+    h1 {
+        text-align: left;
+    }
+    
+    .header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-content: flex-end;
+    }
+}
