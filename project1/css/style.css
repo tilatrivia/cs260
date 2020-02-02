@@ -9,6 +9,21 @@ body {
     background-color: #E7E7E7;
 }
 
+ul {
+    list-style-type: none;
+}
+
+h1 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 48px;
+}
+
+h2 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 36px;
+    margin-top: 20px;
+}
+
 p {
     color: #222222;
 }
@@ -33,6 +48,10 @@ a:active {
 .center-column {
     max-width: 800px;
     margin: 0 auto;
+}
+
+.center-text {
+    text-align: center;
 }
 
 
@@ -113,10 +132,11 @@ a:active {
 
 /* Content */
 .content {
-    padding: 100px 20px;
+    padding: 40px 20px;
 }
 
 .landing {
+    padding: 100px 20px;
     text-align: center;
 
     display: flex;
