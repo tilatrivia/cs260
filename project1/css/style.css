@@ -24,6 +24,15 @@ h2 {
     margin-top: 20px;
 }
 
+h3 {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+h4 {
+    font-size: 18px;
+}
+
 p {
     color: #222222;
 }
@@ -135,6 +144,46 @@ a:active {
     padding: 40px 20px;
 }
 
+.tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin: 20px 0 40px;
+}
+
+.tile-image {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 20px;
+    clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+@media only screen and (min-width: 600px) {
+    .tile {
+        display: block;
+    }
+
+    .title-image {
+        clip-path: none;
+    }
+
+    .tile-left {
+        float: left;
+        order: -1;
+        margin-right: 20px;
+        clip-path: polygon(0 0, 100% 0, 90% 100%, 0 100%);
+    }
+    
+    .tile-right {
+        float: right;
+        order: 1;
+        margin-left: 20px;
+        clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%);
+    }
+}
+
+/* landing */
 .landing {
     padding: 100px 20px;
     text-align: center;
