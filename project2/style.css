@@ -6,7 +6,6 @@
 
 body {
     min-height: 100%;
-    max-width: 748px;
     margin: 0 auto;
 }
 
@@ -45,16 +44,28 @@ p {
     font-family: 'Sura', serif;
     font-size: 20px;
     font-weight: 600;
-    margin: 20px 0;
+    margin: 20px auto;
 
     text-align: center;
     vertical-align: middle;
+    max-width: 600px;
     min-width: 0;
+}
+
+a:link,
+a:visited {
+    color: #0000dd;
+    text-decoration: none;
+}
+
+a:hover,
+a:active {
+    color: #ffdd00;
 }
 
 .clue {
     color: #ffffff;
-    font-size: 12px;
+    font-size: 10px;
     margin: 2px;
 
     line-height: 1;
@@ -65,6 +76,7 @@ p {
 .question {
     color: #ffffff;
     font-size: 12px;
+    font-style: italic;
     margin: 2px;
 
     line-height: 1;
@@ -115,6 +127,12 @@ p {
 
     .board-category {
         margin-bottom: 0;
+    }
+}
+
+@media only screen and (min-width: 1122px) {
+    #board {
+        zoom: 1.5;
     }
 }
 
