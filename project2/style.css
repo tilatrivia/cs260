@@ -7,6 +7,7 @@
 body {
     min-height: 100%;
     margin: 0 auto;
+    padding: 30px 0;
 }
 
 h1 {
@@ -97,7 +98,7 @@ a:active {
 
 .control {
     color: #0000dd;
-    min-width: 200px;
+    width: 160px;
 }
 
 .control:hover {
@@ -105,8 +106,8 @@ a:active {
 }
 
 .control-icon {
-    width: 120px;
-    margin: auto;
+    width: 60px;
+    margin: 0 50px;
 }
 
 #board {
@@ -116,7 +117,7 @@ a:active {
     justify-content: center;
 
     width: 128px;
-    margin: 0 auto;
+    margin: 20px auto;
     padding: 2px;
 
     background-color: #000000;
@@ -149,7 +150,6 @@ a:active {
         justify-content: center;
 
         width: 748px;
-        margin: 40px auto;
 
         zoom: 1;
     }
