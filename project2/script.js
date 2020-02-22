@@ -5,36 +5,77 @@ window.addEventListener('load', () => {
         tile.addEventListener('click', tileClicked);
     }
 
+    document.getElementById('reset-board').addEventListener('click', () => {
+        for (let tile of tileArray) {
+            showTileUnseen(tile);
+        }
+    });
+
+    document.getElementById('show-clues').addEventListener('click', () => {
+        for (let tile of tileArray) {
+            showTileClue(tile);
+        }
+    });
+
+    document.getElementById('show-questions').addEventListener('click', () => {
+        for (let tile of tileArray) {
+            showTileQuestion(tile);
+        }
+    });
+
     fetchQuestionsAndUpdateBoard();
 
 })
 
 
 function tileClicked(event) {
-    let state = event.currentTarget.attributes["data-state"].value;
-    console.log(state);
+    let tile = event.currentTarget;
+    let state = tile.attributes["data-state"].value;
+    console.log(tile, state);
 
     if (state === "unseen") {
-        event.currentTarget.children[0].style.display = "none";
-        event.currentTarget.children[1].style.display = "inline-block";
-
-        event.currentTarget.attributes["data-state"].value = "clue";
+        showTileClue(event.currentTarget);
     } else if (state === "clue") {
-        event.currentTarget.children[1].style.display = "none";
-        event.currentTarget.children[2].style.display = "inline-block";
-
-        event.currentTarget.attributes["data-state"].value = "question";
+        showTileQuestion(event.currentTarget);
     } else if (state === "question") {
-        event.currentTarget.children[2].style.display = "none";
-
-        event.currentTarget.attributes["data-state"].value = "seen";
+        showTileSeen(event.currentTarget);
     } else if (state === "seen") {
-        event.currentTarget.children[1].style.display = "inline-block";
-
-        event.currentTarget.attributes["data-state"].value = "clue";
+        showTileClue(event.currentTarget);
     } else {
         console.log("Tile state error!", event);
     }
+}
+
+
+function setBoardShow(event) {}
+
+
+function showTileUnseen(tile) {
+    tile.children[0].style.display = "inline-block";
+    tile.children[1].style.display = "none";
+    tile.children[2].style.display = "none";
+    tile.attributes["data-state"].value = "unseen";
+}
+
+function showTileClue(tile) {
+    tile.children[0].style.display = "none";
+    tile.children[1].style.display = "inline-block";
+    tile.children[2].style.display = "none";
+    tile.attributes["data-state"].value = "clue";
+}
+
+function showTileQuestion(tile) {
+    tile.children[0].style.display = "none";
+    tile.children[1].style.display = "none";
+    tile.children[2].style.display = "inline-block";
+    tile.attributes["data-state"].value = "question";
+}
+
+function showTileSeen(tile) {
+    tile.children[0].style.display = "none";
+    tile.children[1].style.display = "none";
+    tile.children[2].style.display = "none";
+    tile.attributes["data-state"].value = "seen";
 }
 
 

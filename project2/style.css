@@ -44,7 +44,7 @@ p {
     font-family: 'Sura', serif;
     font-size: 20px;
     font-weight: 600;
-    margin: 20px auto;
+    margin: 0 auto;
 
     text-align: center;
     vertical-align: middle;
@@ -86,6 +86,29 @@ a:active {
 
 
 
+.control-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    margin: 20px auto;
+}
+
+.control {
+    color: #0000dd;
+    min-width: 200px;
+}
+
+.control:hover {
+    color: #ffdd00;
+}
+
+.control-icon {
+    width: 120px;
+    margin: auto;
+}
+
 #board {
     display: flex;
     flex-direction: column;
@@ -115,12 +138,18 @@ a:active {
 }
 
 @media only screen and (min-width: 748px) {
+    .control-container {
+        flex-direction: row;
+
+    }
+
     #board {
         flex-direction: row;
         align-items: center;
         justify-content: center;
 
         width: 748px;
+        margin: 40px auto;
 
         zoom: 1;
     }
