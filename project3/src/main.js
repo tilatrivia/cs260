@@ -4,9 +4,12 @@ import router from './router'
 
 Vue.config.productionTip = false
 
+Vue.use(require('vue-moment'));
+
 import mock from './mock-data.js'
 
 let data = {
+    nextId: mock.nextId,
     queue: mock.queue,
     schedule: mock.schedule,
     stats: mock.stats,

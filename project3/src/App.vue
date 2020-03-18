@@ -60,6 +60,7 @@ export default {
 
     --closed: #bb0000;
     --open: #00bb00;
+    --passoff: #edd7b2;
 }
 
 
@@ -81,6 +82,21 @@ h1 {
     font-family: 'Ubuntu', sans-serif;
     font-size: 36px;
     margin: 0;
+    color: var(--textLight);
+}
+
+h2 {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 36px;
+    margin: 20px 0 10px;
+    color: var(--mainColor);
+}
+
+h3 {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--textDark);
 }
 
 p {
