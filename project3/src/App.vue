@@ -2,14 +2,14 @@
     <div id="app">
         <div id="header">
             <div id="open-close">
-                <a :class="{ 'open-button': true, open: this.open }" @click="toggleOpen()">{{ (this.open) ? "Open" : "Closed" }}
-                </a>
+                <button :class="{ 'open-button': true, open: this.open }" @click="toggleOpen()">{{ (this.open) ? "Open" : "Closed" }}
+                </button>
             </div>
             <div id="queue-name">
-                <h1 id="queue-name">{{ this.$root.$data.settings.queueName }}</h1>
+                <h1 id="queue-name">{{ this.queueName }}</h1>
             </div>
             <div id="user-name">
-                <p>Demo View</p>
+                <p>{{ this.user }}</p>
             </div>
         </div>
         <div id="nav">
@@ -27,6 +27,7 @@
 export default {
     data: function() {
         return {
+            user: this.$root.$data.user,
             open: true,
             queueName: this.$root.$data.settings.queueName,
         }
@@ -61,6 +62,8 @@ export default {
     --closed: #bb0000;
     --open: #00bb00;
     --passoff: #edd7b2;
+    --remove: #edb9b2;
+    --help: #bcedb2;
 }
 
 
@@ -113,6 +116,11 @@ a:hover {
     text-decoration: underline;
 }
 
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
 
 
 #header {
@@ -135,7 +143,7 @@ a:hover {
     order: 2;
 }
 
-a.open-button {
+button.open-button {
     display: inline-block;
     width: 80px;
     height: 35px;
@@ -148,9 +156,10 @@ a.open-button {
 
     color: var(--textLight);
     background-color: var(--closed);
+    border: none;
 }
 
-a.open {
+button.open {
     background-color: var(--open);
 }
 
