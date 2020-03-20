@@ -9,13 +9,14 @@
             <li>Various Averages</li>
             <li>Help Counts for Students and TAs</li>
         </ul>
+        <br>
 
         <h3>Queue History</h3>
         <form class="pure-form">
             <label for="fname">Student Search</label><br>
-            <i class="fas fa-search"></i><input v-model="studentSearch" /><br>
-            <label for="fname">TA</label><br>
-            <i class="fas fa-search"></i><input v-model="taSearch" /><br>
+            <input type="search" v-model="studentSearch" /><br>
+            <label for="fname">TA Search</label><br>
+            <input type="search" v-model="taSearch" /><br>
         </form>
 
         <div class="history-ticket" v-for="ticket in history" :key="ticket.id">

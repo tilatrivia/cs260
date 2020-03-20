@@ -52,7 +52,7 @@ let mock = {
     },
     settings: {
         queueName: "Help Queue",
-        message: "Leave a question and a room number below. If you need to do a passoff check the box."
+        message: "Leave a question below. If you need to do a passoff check the box."
     },
     history: [
         {"id":1,"name":"Jamey Chasemore","enterTime":"2020-02-07T02:15:28Z","waitSeconds":316,"helpedSeconds":376,"helpedBy":"Curry O'Carrol"},

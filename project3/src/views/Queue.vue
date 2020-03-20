@@ -29,11 +29,6 @@ export default {
 </script>
 
 <style scoped>
-.page {
-    max-width: 600px;
-    margin: 0 auto;
-}
-
 .ticket {
     margin-bottom: 10px;
 }

@@ -16,7 +16,10 @@ export default {
     name: 'QueueTicket',
     data() {
         return {
-            fromSeconds: null,
+            fromSeconds: 0,
+            interval: setInterval(() => {
+                this.updateFrom();
+            },200)
         }
     },
     props: {
@@ -27,22 +30,17 @@ export default {
             return (Math.floor(this.fromSeconds / 60)) + ':' + ((Math.abs(this.fromSeconds % 60) < 10) ? "0" : "") + Math.abs(this.fromSeconds % 60);
         }
     },
-    mounted() {
-        this.interval = setInterval(() => {
-            this.updateFrom(); 
-        },200)
-    },
     methods: {
         updateFrom() {
             this.fromSeconds = Math.floor(moment().diff(moment(this.ticket.enterTime)) / 1000) - this.ticket.waitSeconds;
         },
         removeTicket() {
             if (!this.ticket.waitSeconds) {
-                console.log("Move to helped");
+                console.log("Ticket " + this.ticket.id + " changed to being helped");
                 this.ticket.waitSeconds = this.fromSeconds;
                 this.ticket.helpedBy = this.$root.$data.user;
             } else {
-                console.log("Remove from helped and into history");
+                console.log("Ticket " + this.ticket.id + " moved into history");
                 this.$root.$data.history.push({
                     id: this.ticket.id,
                     name: this.ticket.name,
@@ -51,9 +49,13 @@ export default {
                     helpedSeconds: this.fromSeconds,
                     helpedBy: this.ticket.helpedBy,
                 })
+                this.$root.$data.myTicket = undefined;
                 this.$root.$data.queue = this.$root.$data.queue.filter(ticket => ticket.id !== this.ticket.id);
             }
         }
+    },
+    destroyed() {
+        clearInterval(this.interval);
     }
 }
 </script>

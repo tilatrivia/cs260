@@ -105,6 +105,9 @@ h3 {
 p {
     font-size: 18px;
     margin: 0;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
 }
 
 a {
@@ -119,6 +122,47 @@ a:hover {
 ul {
     list-style-type: none;
     padding: 0;
+}
+
+button {
+    padding: 5px;
+    border: none;
+
+    font-size: 18px;
+    text-align: center;
+    background-color: var(--gray-3);
+}
+
+button:hover,
+button:focus {
+    background-color: var(--gray-2);
+}
+
+input[type="checkbox"] {
+    width: 24px;
+    height: 24px;
+}
+
+textarea {
+    padding: 10px;
+    border: none;
+
+    font-family: 'Open sans', sans-serif;
+    font-size: 18px;
+    background-color: var(--gray-1);
+
+    resize: none;
+}
+
+hr {
+    margin: 20px auto;
+    border-width: 2px;
+    border-color: var(--mainColor);
+}
+
+.page {
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 
@@ -147,16 +191,9 @@ button.open-button {
     display: inline-block;
     width: 80px;
     height: 35px;
-    padding: 5px;
-    
-    order: 2;
-    text-align: center;
-    font-size: 18px;
-    text-decoration: none;
 
     color: var(--textLight);
     background-color: var(--closed);
-    border: none;
 }
 
 button.open {

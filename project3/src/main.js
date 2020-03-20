@@ -11,6 +11,7 @@ import mock from './mock-data.js'
 let data = {
     user: "Demo User",
     nextId: mock.nextId,
+    myTicket: undefined,
     queue: mock.queue,
     schedule: mock.schedule,
     stats: mock.stats,
