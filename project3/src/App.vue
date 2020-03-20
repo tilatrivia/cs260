@@ -15,9 +15,7 @@
         <div id="nav">
             <router-link to="/">Get Help</router-link>
             <router-link to="/queue">Queue</router-link>
-            <!-- <router-link to="/schedule">Schedule</router-link> -->
             <router-link to="/history">History</router-link>
-            <!-- <router-link to="/settings">Settings</router-link> -->
         </div>
 
         <router-view/>
