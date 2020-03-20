@@ -16,6 +16,7 @@
             <router-link to="/">Get Help</router-link>
             <router-link to="/queue">Queue</router-link>
             <router-link to="/history">History</router-link>
+
         </div>
 
         <router-view/>
