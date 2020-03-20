@@ -2,7 +2,7 @@
     <div id="app">
         <div id="header">
             <div id="open-close">
-                <button :class="{ 'open-button': true, open: this.open }" @click="toggleOpen()">{{ (this.open) ? "Open" : "Closed" }}
+                <button :class="{ 'open-button': true, open: this.$root.$data.open }" @click="toggleOpen()">{{ (this.$root.$data.open) ? "Open" : "Closed" }}
                 </button>
             </div>
             <div id="queue-name">
@@ -13,13 +13,19 @@
             </div>
         </div>
         <div id="nav">
-            <router-link to="/">Join</router-link>
+            <router-link to="/">Get Help</router-link>
             <router-link to="/queue">Queue</router-link>
-            <router-link to="/schedule">Schedule</router-link>
-            <router-link to="/stats">Statistics</router-link>
-            <router-link to="/settings">Settings</router-link>
+            <!-- <router-link to="/schedule">Schedule</router-link> -->
+            <router-link to="/history">History</router-link>
+            <!-- <router-link to="/settings">Settings</router-link> -->
         </div>
+
         <router-view/>
+
+        <div class="footer">
+            <p>Made by Truman Kautzman.</p>
+            <p>Source found on <a href="https://github.com/tilatrivia/cs260/tree/master/project3">GitHub</a>.</p>
+        </div>
     </div>
 </template>
 
@@ -28,17 +34,16 @@ export default {
     data: function() {
         return {
             user: this.$root.$data.user,
-            open: true,
             queueName: this.$root.$data.settings.queueName,
         }
     },
     methods: {
         toggleOpen: function() {
-            if (this.open) {
-                this.open = false;
+            if (this.$root.$data.open) {
+                this.$root.$data.open = false;
                 this.closeQueue();
             } else {
-                this.open = true;
+                this.$root.$data.open = true;
             }
         },
         closeQueue: function() {
@@ -50,20 +55,21 @@ export default {
 
 <style>
 :root {
-    --mainColor: #002d5f;
+    --main: #002d5f;
+    --main-light: #215fa5;
 
-    --gray-1: #eeeeee;
-    --gray-2: #e4e4e4;
-    --gray-3: #dddddd;
+    --grey-50: #fafafa;
+    --grey-100: #f5f5f5;
+    --grey-200: #eeeeee;
+    --grey-300: #e0e0e0;
+    --grey-400: #bdbdbd;
 
-    --textLight: #ffffff;
-    --textDark: #000000;
+    --text-light: #ffffff;
+    --text-dark: #000000;
 
     --closed: #bb0000;
     --open: #00bb00;
     --passoff: #edd7b2;
-    --remove: #edb9b2;
-    --help: #bcedb2;
 }
 
 
@@ -74,32 +80,37 @@ export default {
 }
 
 #app {
+    position: relative;
+    min-height: 100vh;
+    padding-bottom: 88px;
+
     font-family: 'Open Sans', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    color: var(--textDark);
+
+    color: var(--text-dark);
 }
 
 h1 {
     font-family: 'Ubuntu', sans-serif;
     font-size: 36px;
     margin: 0;
-    color: var(--textLight);
+    color: var(--text-light);
 }
 
 h2 {
     font-family: 'Ubuntu', sans-serif;
     font-size: 36px;
     margin: 20px 0 10px;
-    color: var(--mainColor);
+    color: var(--main);
 }
 
 h3 {
     font-family: 'Open Sans', sans-serif;
     font-weight: 700;
     font-size: 20px;
-    color: var(--textDark);
+    color: var(--text-dark);
 }
 
 p {
@@ -111,7 +122,7 @@ p {
 }
 
 a {
-    color: var(--mainColor);
+    color: var(--main);
     text-decoration: none;
 }
 
@@ -130,39 +141,51 @@ button {
 
     font-size: 18px;
     text-align: center;
-    background-color: var(--gray-3);
+    background-color: var(--grey-200);
 }
 
 button:hover,
 button:focus {
-    background-color: var(--gray-2);
+    padding: 1px 5px 5px;
+    border-top: 4px solid var(--main);
 }
 
-input[type="checkbox"] {
-    width: 24px;
-    height: 24px;
+button:disabled {
+    color: var(--grey-400);
+    background-color: var(--grey-200);
 }
 
-textarea {
+button:disabled:hover {
+    padding: 5px;
+    border-top: none;
+}
+
+textarea,
+input[type="text"],
+input[type="search"] {
     padding: 10px;
     border: none;
 
     font-family: 'Open sans', sans-serif;
     font-size: 18px;
-    background-color: var(--gray-1);
+    background-color: var(--grey-50);
 
     resize: none;
+}
+
+textarea:disabled {
+    background-color: var(--grey-200);
 }
 
 hr {
     margin: 20px auto;
     border-width: 2px;
-    border-color: var(--mainColor);
+    border-color: var(--main);
 }
 
 .page {
     max-width: 600px;
-    margin: 0 auto;
+    margin: 20px auto;
 }
 
 
@@ -176,8 +199,8 @@ hr {
     justify-content: space-between;
     align-items: flex-start;
 
-    color: var(--textLight);
-    background-color: var(--mainColor);
+    color: var(--text-light);
+    background-color: var(--main);
 }
 
 #open-close {
@@ -198,6 +221,12 @@ button.open-button {
 
 button.open {
     background-color: var(--open);
+}
+
+button.open-button:hover,
+button.open-button:focus {
+    padding: 5px;
+    border-top: none;
 }
 
 #queue-name {
@@ -250,7 +279,7 @@ button.open {
     flex-direction: column;
     justify-content: center;
 
-    background-color: var(--gray-3);
+    background-color: var(--grey-300);
 }
 
 #nav a:link,
@@ -263,11 +292,11 @@ button.open {
 }
 
 #nav a:hover {
-    background-color: var(--gray-2);
+    background-color: var(--grey-200);
 }
 
 #nav a.router-link-exact-active {
-    background-color: var(--gray-1);
+    background-color: var(--grey-100);
 }
 
 @media only screen and (min-width: 620px) {
@@ -280,5 +309,18 @@ button.open {
     #nav a:visited {
         width: 100px;
     }
+}
+
+
+
+.footer {
+    height: 88px;
+    width: 100%;
+    padding: 20px;
+    position: absolute;
+    bottom: 0;
+
+    line-height: 24px;
+    background-color: var(--grey-300);
 }
 </style>

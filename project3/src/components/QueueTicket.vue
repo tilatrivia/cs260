@@ -49,7 +49,9 @@ export default {
                     helpedSeconds: this.fromSeconds,
                     helpedBy: this.ticket.helpedBy,
                 })
-                this.$root.$data.myTicket = undefined;
+                if (this.$root.$data.myTicket && this.ticket.id === this.$root.$data.myTicket.id){
+                    this.$root.$data.myTicket = undefined;
+                }
                 this.$root.$data.queue = this.$root.$data.queue.filter(ticket => ticket.id !== this.ticket.id);
             }
         }
@@ -67,13 +69,13 @@ export default {
     padding: 8px 10px;
     border: none;
 
-    background-color: var(--gray-1);
+    background-color: var(--grey-200);
     font-family: 'Open Sans', sans-serif;
 }
 
 .queue-ticket:hover,
 .queue-ticket:focus {
-    border-top: 4px solid var(--mainColor);
+    border-top: 4px solid var(--main);
     padding: 4px 10px 8px;
 }
 

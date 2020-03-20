@@ -1,11 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Join from '../views/Join.vue'
-import Waiting from '../views/Waiting.vue'
-import Helped from '../views/Helped.vue'
 import Queue from '../views/Queue.vue'
 import Schedule from '../views/Schedule.vue'
 import Stats from '../views/Stats.vue'
+import History from '../views/History.vue'
 import Settings from '../views/Settings.vue'
 
 Vue.use(VueRouter)
@@ -16,23 +15,7 @@ const routes = [
         name: 'Join',
         component: Join,
         meta: {
-            title: "Join Help Queue"
-        }
-    },
-    {
-        path: '/wait',
-        name: 'Waiting',
-        component: Waiting,
-        meta: {
-            title: "Waiting in Help Queue"
-        }
-    },
-    {
-        path: '/helped',
-        name: 'Helped',
-        component: Helped,
-        meta: {
-            title: "Being Helped in Help Queue"
+            title: "Help Queue - Get Help"
         }
     },
     {
@@ -40,7 +23,7 @@ const routes = [
         name: 'Queue',
         component: Queue,
         meta: {
-            title: "Help Queue"
+            title: "Help Queue - Queue"
         }
     },
     {
@@ -48,7 +31,7 @@ const routes = [
         name: 'Schedule',
         component: Schedule,
         meta: {
-            title: "Help Queue Schedule"
+            title: "Help Queue - Schedule"
         }
     },
     {
@@ -56,7 +39,15 @@ const routes = [
         name: 'Stats',
         component: Stats,
         meta: {
-            title: "Help Queue Statistics"
+            title: "Help Queue - Statistics"
+        }
+    },
+    {
+        path: '/history',
+        name: 'History',
+        component: History,
+        meta: {
+            title: "Help Queue - History"
         }
     },
     {
@@ -64,7 +55,7 @@ const routes = [
         name: 'Settings',
         component: Settings,
         meta: {
-            title: "Help Queue Settings"
+            title: "Help Queue - Settings"
         }
     }
 ]

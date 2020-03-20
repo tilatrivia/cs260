@@ -9,6 +9,7 @@ Vue.use(require('vue-moment'));
 import mock from './mock-data.js'
 
 let data = {
+    open: true,
     user: "Demo User",
     nextId: mock.nextId,
     myTicket: undefined,
