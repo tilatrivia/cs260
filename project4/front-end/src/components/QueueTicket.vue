@@ -10,7 +10,7 @@
 
 
 <script>
-let moment = require('moment');
+import moment from 'moment';
 
 export default {
     name: 'QueueTicket',
