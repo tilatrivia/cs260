@@ -51,7 +51,20 @@ const History = mongoose.model('History', historySchema);
 
 /* API Endpoints */
 
-app.get('/queue', async (req, res) => {
+// GET open or closed
+let open = false;
+app.get('/api', (req, res) => {
+    return res.send({open: open});
+})
+
+// PUT open or closed
+app.put('/api', (req, res) => {
+    open = req.body.open;
+    return res.send({open: open});
+})
+
+// GET all tickets
+app.get('/api/queue', async (req, res) => {
     try {
         let tickets = await Ticket.find();
         res.send({tickets: tickets});
@@ -61,7 +74,8 @@ app.get('/queue', async (req, res) => {
     }
 });
 
-app.get('/queue/stats', async (req, res) => {
+// GET join page statistics
+app.get('/api/queue/stats', async (req, res) => {
     try {
         let tickets = await Ticket.find();
         let numHelping = tickets.filter(ticket => ticket.waitSeconds).length;
@@ -81,20 +95,20 @@ app.get('/queue/stats', async (req, res) => {
     }
 })
 
-app.get('/queue/:id', async (req, res) => {
+// GET individual ticket information
+app.get('/api/queue/:id', async (req, res) => {
     try {
         let tickets = await Ticket.find();
         let thisTicket = await Ticket.findOne({_id: req.params.id});
-        let numHelping = tickets.filter(ticket => ticket.waitSeconds).length;
-        let numWaiting = tickets.filter(ticket => !ticket.waitSeconds).length;
+        if (!thisTicket) {
+            return res.sendStatus(404);
+        }
         let placeInLine = tickets.filter(ticket => {
             return (!ticket.waitSeconds) && (moment(thisTicket.enterTime).diff(ticket.enterTime) > 0)
         }).length + 1;
 
         return res.send({
             ticket: thisTicket,
-            helping: numHelping,
-            waiting: numWaiting,
             place: placeInLine
         })
     } catch (error) {
@@ -103,7 +117,8 @@ app.get('/queue/:id', async (req, res) => {
     }
 });
 
-app.post('/queue', async (req, res) => {
+// POST join queue with new ticket
+app.post('/api/queue', async (req, res) => {
     if (!req.body.name || !(req.body.isPassoff || req.body.question)) {
         return res.status(400).send({
             message: "improper ticket sent"
@@ -118,14 +133,25 @@ app.post('/queue', async (req, res) => {
             question: req.body.question
         })
         await ticket.save();
-        return res.send({ticket: ticket});
+
+        let tickets = await Ticket.find();
+        let thisTicket = ticket;
+        let placeInLine = tickets.filter(ticket => {
+            return (!ticket.waitSeconds) && (moment(thisTicket.enterTime).diff(ticket.enterTime) > 0)
+        }).length + 1;
+
+        return res.send({
+            ticket: ticket,
+            place: placeInLine
+        });
     } catch (error) {
         console.log(error);
         return res.sendStatus(500);
     }
 });
 
-app.put('/queue/:id', async (req, res) => {
+// PUT claim ticket for helping
+app.put('/api/queue/:id', async (req, res) => {
     if (!req.body.helpedBy) {
         return res.status(400).send({
             message: "improper ticket update"
@@ -134,7 +160,6 @@ app.put('/queue/:id', async (req, res) => {
 
     try {
         let ticket = await Ticket.findOne({_id: req.params.id});
-        console.log(ticket);
         if (ticket.waitSeconds) {
             return res.status(400).send({
                 message: "ticket already cliamed"
@@ -151,7 +176,8 @@ app.put('/queue/:id', async (req, res) => {
     }
 });
 
-app.delete('/queue/:id', async (req, res) => {
+// DELETE remove ticket and move to history
+app.delete('/api/queue/:id', async (req, res) => {
     try {
         let ticket = await Ticket.findOne({_id: req.params.id});
         if (ticket.waitSeconds) {
@@ -174,7 +200,8 @@ app.delete('/queue/:id', async (req, res) => {
     }
 });
 
-app.get('/history', async (req, res) => {
+// GET ticket history
+app.get('/api/history', async (req, res) => {
     try {
         let history = await History.find();
         res.send({history: history});
@@ -184,4 +211,5 @@ app.get('/history', async (req, res) => {
     }
 });
 
+// listen on port 3000
 app.listen(3000, () => console.log('Server listening on port 3000!'));

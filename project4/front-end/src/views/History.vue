@@ -14,35 +14,51 @@
             <p class="waited">Waited</p>
             <p class="helped">Helped</p>
         </div>
-        <div class="history-ticket" v-for="ticket in history" :key="ticket.id">
+        <div class="history-ticket" v-for="ticket in viewHistory" :key="ticket.id">
             <p class="name">{{ ticket.name }}</p>
             <p class="ta">{{ ticket.helpedBy }}</p>
             <p class="date">{{ ticket.enterTime | moment("MMM D") }}</p>
             <p class="time">{{ ticket.enterTime | moment("h:mma") }}</p>
             <p class="waited">{{ secondsToString(ticket.waitSeconds) }}</p>
-            <p class="helped">{{ secondsToString(ticket.helpedSeconds) }}</p>
+            <p class="helped">{{ secondsToString(ticket.helpSeconds) }}</p>
         </div>
     </div>
 </template>
 
 
 <script>
+import axios from 'axios';
+
 export default {
+    name: "History",
     data() {
         return {
+            history: [],
             studentSearch: "",
             taSearch: ""
         }
     },
     computed: {
-        history() {
-            return this.$root.$data.history.filter(ticket => {
+        viewHistory() {
+            return this.history.filter(ticket => {
                 return ((ticket.name.toLowerCase().search(this.studentSearch.toLowerCase()) >= 0) &&
                     (ticket.helpedBy.toLowerCase().search(this.taSearch.toLowerCase()) >= 0))
             });
         }
     },
+    created() {
+        this.getHistory();
+    },
     methods: {
+        async getHistory() {
+            try {
+                let res = await axios.get('/api/history');
+                this.history = res.data.history;
+                return true;
+            } catch (error) {
+                console.log(error);
+            }
+        },
         secondsToString(seconds) {
             return (Math.floor(seconds / 60)) + ':' + ((Math.abs(seconds % 60) < 10) ? "0" : "") + Math.abs(seconds % 60);
         }

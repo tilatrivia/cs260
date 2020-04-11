@@ -6,7 +6,7 @@
         <div v-if="this.status === 'join'" class="join">
             <div class="info">
                 <div class="info-tile">
-                    <p class="info-value">{{ this.numBeingHelped }}</p>
+                    <p class="info-value">{{ this.helping }}</p>
                     <p class="info-label">Being Helped</p> 
                 </div>
                 <div class="info-tile">
@@ -14,7 +14,7 @@
                     <p class="info-label">Average Wait</p> 
                 </div>
                 <div class="info-tile">
-                    <p class="info-value">{{ this.numWaiting }}</p>
+                    <p class="info-value">{{ this.waiting }}</p>
                     <p class="info-label">Waiting</p>
                 </div>
             </div>
@@ -30,7 +30,7 @@
         <div v-if="this.status === 'waiting'" class="waiting">
             <div class="info">
                 <div class="info-tile">
-                    <p class="info-value">{{ this.numBeingHelped }}</p>
+                    <p class="info-value">{{ this.helping }}</p>
                     <p class="info-label">Being Helped</p> 
                 </div>
                 <div class="info-tile">
@@ -38,21 +38,21 @@
                     <p class="info-label">Waited</p> 
                 </div>
                 <div class="info-tile">
-                    <p class="info-value">{{ this.placeInLine }}</p>
+                    <p class="info-value">{{ this.place }}</p>
                     <p class="info-label">Place</p>
                 </div>
             </div>
             <br>
 
             <h3 v-if="!this.$root.$data.myTicket.isPassoff">Your Question</h3>
-            <h3 v-if="this.$root.$data.myTicket.isPassoff">Pass Off</h3>
+            <h3 v-else>Pass Off</h3>
             <p class="question">{{ this.$root.$data.myTicket.question }}</p>
         </div>
 
         <div v-if="this.status === 'helped'" class="being helped">
             <div class="info">
                 <div class="info-tile">
-                    <p class="info-value">{{ this.numBeingHelped }}</p>
+                    <p class="info-value">{{ this.helping }}</p>
                     <p class="info-label">Being Helped</p> 
                 </div>
                 <div class="info-tile">
@@ -60,21 +60,22 @@
                     <p class="info-label">Helped</p> 
                 </div>
                 <div class="info-tile">
-                    <p class="info-value">{{ this.numWaiting }}</p>
+                    <p class="info-value">{{ this.waiting }}</p>
                     <p class="info-label">Waiting</p>
                 </div>
             </div>
             <br>
 
             <h3 v-if="!this.$root.$data.myTicket.isPassoff">Your Question</h3>
-            <h3 v-if="this.$root.$data.myTicket.isPassoff">Pass Off</h3>
+            <h3 v-else>Pass Off</h3>
             <p class="question">{{ this.$root.$data.myTicket.question }}</p>
         </div>
     </div>
 </template>
 
 <script>
-import moment from 'moment';
+import axios from 'axios';
+// import moment from 'moment';
 
 export default {
     name: 'Join',
@@ -83,12 +84,15 @@ export default {
             queueMessage: this.$root.$data.settings.message,
             isPassoff: false,
             question: "",
+
+            avgWaitSeconds: 0,
             fromSeconds: 0,
-            avgWait: 0,
-            interval: setInterval(() => {
-                this.updateAvgWait();
-                this.updateFrom();
-            },200)
+            waiting: 0,
+            helping: 0,
+            place: 0,
+
+            interval: null,
+            waitInterval: null,
         }
     },
     computed: {
@@ -105,7 +109,7 @@ export default {
             return (Math.floor(this.fromSeconds / 60)) + ':' + ((Math.abs(this.fromSeconds % 60) < 10) ? "0" : "") + Math.abs(this.fromSeconds % 60);
         },
         avgWaitString() {
-            return (Math.floor(this.avgWait / 60)) + ':' + ((Math.abs(this.avgWait % 60) < 10) ? "0" : "") + Math.floor(Math.abs(this.avgWait % 60));
+            return (Math.floor(this.avgWaitSeconds / 60)) + ':' + ((Math.abs(this.avgWaitSeconds % 60) < 10) ? "0" : "") + Math.floor(Math.abs(this.avgWaitSeconds % 60));
         },
         placeInLine() {
             return this.$root.$data.queue.filter(ticket => {
@@ -128,37 +132,82 @@ export default {
                 this.isPassoff = false;
             }
         },
-        submitTicket() {
-            this.$root.$data.myTicket = {
-                id: this.getId(),
+        // submitTicket() {
+        //     this.$root.$data.myTicket = {
+        //         id: this.getId(),
+        //         name: this.$root.$data.user,
+        //         enterTime: moment().format(),
+        //         waitSeconds: 0,
+        //         helpedSeconds: 0,
+        //         helpedBy: "",
+        //         isPassoff: this.isPassoff,
+        //         question: this.question,
+        //     }
+        //     this.$root.$data.queue.push(this.$root.$data.myTicket);
+        // },
+        async updateStats() {
+            let res = await axios.get('/api/queue/stats');
+            this.avgWaitSeconds = res.data.averageWait;
+            this.waiting = res.data.waiting;
+            this.helping = res.data.helping;
+        },
+        async submitTicket() {
+            let res = await axios.post('/api/queue', {
                 name: this.$root.$data.user,
-                enterTime: moment().format(),
-                waitSeconds: 0,
-                helpedSeconds: 0,
-                helpedBy: "",
                 isPassoff: this.isPassoff,
-                question: this.question,
+                question: this.question
+            })
+            this.$root.$data.myTicket = res.data.ticket;
+            this.place = res.data.place;
+            this.question = "";
+            this.isPassoff = false;
+        },
+        async updateTicket() {
+            try {
+                let res = await axios.get('/api/queue/' + this.$root.$data.myTicket._id);
+                this.$root.$data.myTicket = res.data.ticket;
+                this.place = res.data.place;
+            } catch (error) {
+                if (error.response.status === 404) {
+                    this.$root.$data.myTicket = undefined;
+                } else {
+                    console.log(error);
+                }
             }
-            this.$root.$data.queue.push(this.$root.$data.myTicket);
-        },
-        getId() {
-            let newId = this.$root.$data.nextId;
-            this.$root.$data.nextId++;
-            return newId;
-        },
-        updateFrom() {
-            if (this.status === 'waiting' || this.status === 'helped') {
-                this.fromSeconds = Math.floor(moment().diff(moment(this.$root.$data.myTicket.enterTime)) / 1000) - this.$root.$data.myTicket.waitSeconds;
+            
+        }
+        // getId() {
+        //     let newId = this.$root.$data.nextId;
+        //     this.$root.$data.nextId++;
+        //     return newId;
+        // },
+        // updateFrom() {
+        //     if (this.status === 'waiting' || this.status === 'helped') {
+        //         this.fromSeconds = Math.floor(moment().diff(moment(this.$root.$data.myTicket.enterTime)) / 1000) - this.$root.$data.myTicket.waitSeconds;
+        //     }
+        // },
+        // updateAvgWait() {
+        //     this.avgWait = this.$root.$data.queue.filter(ticket => !ticket.waitSeconds > 0).reduce((avg, ticket, i, src) => {
+        //         return avg + ((Math.floor(moment().diff(moment(ticket.enterTime)) / 1000)) / src.length);
+        //     }, 0)
+        // },
+    },
+    created() {
+        this.updateStats();
+        this.interval = setInterval(() => {
+            this.updateStats();
+            if (this.status === "waiting" || this.status === "helped") {
+                this.updateTicket();
             }
-        },
-        updateAvgWait() {
-            this.avgWait = this.$root.$data.queue.filter(ticket => !ticket.waitSeconds > 0).reduce((avg, ticket, i, src) => {
-                return avg + ((Math.floor(moment().diff(moment(ticket.enterTime)) / 1000)) / src.length);
-            }, 0)
-        },
+        },5000);
+        this.waitInterval = setInterval(() => {
+            this.avgWaitSeconds++;
+            this.fromSeconds++;
+        },1000);
     },
     destroyed() {
         clearInterval(this.interval);
+        clearInterval(this.waitInterval);
     }
 }
 </script>

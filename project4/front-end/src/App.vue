@@ -29,24 +29,35 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
     data: function() {
         return {
             user: this.$root.$data.user,
             queueName: this.$root.$data.settings.queueName,
+            interval: null,
         }
     },
     methods: {
-        toggleOpen: function() {
-            if (this.$root.$data.open) {
-                this.$root.$data.open = false;
-                this.closeQueue();
-            } else {
-                this.$root.$data.open = true;
-            }
+        async checkOpen() {
+            let res = await axios.get('/api');
+            this.$root.$data.open = res.data.open;
         },
-        closeQueue: function() {
+        async toggleOpen() {
+            this.$root.$data.open = !this.$root.$data.open;
+            let res = await axios.put('/api', {open: this.$root.$data.open});
+            this.$root.$data.open = res.data.open;
         }
+    },
+    created() {
+        this.checkOpen();
+        this.interval = setInterval(() => {
+            this.checkOpen();
+        },5000)
+    },
+    destroyed() {
+        clearInterval(this.interval);
     }
 }
 </script>

@@ -6,18 +6,17 @@ Vue.config.productionTip = false
 
 Vue.use(require('vue-moment'));
 
-import mock from './mock-data.js'
+// import mock from './mock-data.js'
 
 let data = {
     open: true,
     user: "Demo User",
-    nextId: mock.nextId,
     myTicket: undefined,
-    queue: mock.queue,
-    schedule: mock.schedule,
-    stats: mock.stats,
-    settings: mock.settings,
-    history: mock.history
+    queue: [],
+    settings: {
+        queueName: "Help Queue",
+        message: "Leave a question below. If you need to do a passoff enable the passoff button."
+    }
 }
 
 new Vue({
