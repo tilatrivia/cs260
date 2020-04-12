@@ -204,6 +204,9 @@ app.delete('/api/queue/:id', async (req, res) => {
 app.get('/api/history', async (req, res) => {
     try {
         let history = await History.find();
+        history.sort((first, second) => {
+            return moment().diff(moment(second.enterTime)) - moment().diff(moment(first.enterTime));
+        })
         res.send({history: history});
     } catch (error) {
         console.log(error);
