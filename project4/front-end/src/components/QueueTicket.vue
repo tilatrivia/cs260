@@ -17,7 +17,7 @@ export default {
     name: 'QueueTicket',
     data() {
         return {
-            ticket: this.$root.$data.queue.filter(ticket => ticket._id === this.$vnode.key)[0],
+            ticket: this.$root.$data.queue.find((ticket) => ticket._id === this.$vnode.key),
             fromSeconds: 0,
             fromInterval: null,
         }
@@ -25,6 +25,9 @@ export default {
     computed: {
         fromString() {
             return (Math.floor(this.fromSeconds / 60)) + ':' + ((Math.abs(this.fromSeconds % 60) < 10) ? "0" : "") + Math.abs(this.fromSeconds % 60);
+        },
+        queue() {
+            return this.$root.$data.queue;
         }
     },
     methods: {
@@ -69,8 +72,13 @@ export default {
         //     }
         // }
     },
+    watch: {
+        queue() {
+            this.ticket = this.$root.$data.queue.find((ticket) => ticket._id === this.$vnode.key);
+        }
+    },
     created() {
-        this.fronInterval = setInterval(() => {
+        this.fromInterval = setInterval(() => {
             this.updateFrom();
         },200)
     },

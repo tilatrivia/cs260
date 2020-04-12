@@ -11,6 +11,7 @@
 
 <script>
 import axios from 'axios';
+import moment from 'moment';
 import QueueTicket from '@/components/QueueTicket.vue'
 
 export default {
@@ -26,7 +27,10 @@ export default {
     },
     computed: {
         helping() {
-            return this.$root.$data.queue.filter(ticket => ticket.waitSeconds);
+            return this.$root.$data.queue.filter(ticket => ticket.waitSeconds).sort((first, second) => {
+                return ((Math.floor(moment().diff(moment(second.enterTime)) / 1000) - second.waitSeconds) - 
+                (Math.floor(moment().diff(moment(first.enterTime)) / 1000) - first.waitSeconds))
+            });
         },
         waiting() {
             return this.$root.$data.queue.filter(ticket => !ticket.waitSeconds);

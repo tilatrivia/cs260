@@ -34,9 +34,13 @@ import axios from 'axios';
 export default {
     data: function() {
         return {
-            user: this.$root.$data.user,
             queueName: this.$root.$data.settings.queueName,
             interval: null,
+        }
+    },
+    computed: {
+        user() {
+            return this.$root.$data.user;
         }
     },
     methods: {
@@ -48,9 +52,66 @@ export default {
             this.$root.$data.open = !this.$root.$data.open;
             let res = await axios.put('/api', {open: this.$root.$data.open});
             this.$root.$data.open = res.data.open;
+        },
+        getRandomName() {
+            let names = [
+                "Faythe Smylie",
+                "Veda Sellman",
+                "Perle Thirlwall",
+                "Karalee Thomassin",
+                "Curry O'Carrol",
+                "Denys Giraldez",
+                "Thaddus Terbruggen",
+                "Flossie Audley",
+                "Nerita Lerwill",
+                "Roda Albon",
+                "Fenelia Gratten",
+                "Anne-corinne Andrick",
+                "Jedidiah Bardill",
+                "Dorey Vedeniktov",
+                "Raoul Kliment",
+                "Abeu Wheelhouse",
+                "Harwell Lapley",
+                "Val Kitchenside",
+                "Rodolph Robelin",
+                "Brittaney Gladyer",
+                "Mortimer Farrah",
+                "Kassie Tatlowe",
+                "Filia Fulep",
+                "Carmella Hehir",
+                "Rani Coaten",
+                "Llywellyn Naris",
+                "Analiese Libreros",
+                "Bogart Kernock",
+                "Sergei Seebright",
+                "Natalie Corneille",
+                "Joeann Chomiszewski",
+                "Corinna Wiseman",
+                "Conrad Tallquist",
+                "Vania Iverson",
+                "Kent Itzkovitch",
+                "Deirdre Forst",
+                "Dewie Maypes",
+                "Gilburt Kalinovich",
+                "Saudra Valois",
+                "Druci Welch",
+                "Zebulon Campos",
+                "Justin Pywell",
+                "Tann Sirett",
+                "Jamey Chasemore",
+                "Drucill Balentyne",
+                "Dione Dillon",
+                "Sean Kinder",
+                "Gaynor Chalice",
+                "Traci Layus",
+                "Dulciana Fotheringham",
+            ]
+
+            return names[Math.floor(Math.random() * 50)]
         }
     },
     created() {
+        this.$root.$data.user = this.getRandomName();
         this.checkOpen();
         this.interval = setInterval(() => {
             this.checkOpen();

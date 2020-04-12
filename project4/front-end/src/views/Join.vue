@@ -75,7 +75,7 @@
 
 <script>
 import axios from 'axios';
-// import moment from 'moment';
+import moment from 'moment';
 
 export default {
     name: 'Join',
@@ -110,17 +110,6 @@ export default {
         },
         avgWaitString() {
             return (Math.floor(this.avgWaitSeconds / 60)) + ':' + ((Math.abs(this.avgWaitSeconds % 60) < 10) ? "0" : "") + Math.floor(Math.abs(this.avgWaitSeconds % 60));
-        },
-        placeInLine() {
-            return this.$root.$data.queue.filter(ticket => {
-                return (!ticket.waitSeconds) && (ticket.id < this.$root.$data.myTicket.id)
-            }).length + 1;
-        },
-        numWaiting() {
-            return this.$root.$data.queue.filter(ticket => !ticket.waitSeconds).length;
-        },
-        numBeingHelped() {
-            return this.$root.$data.queue.filter(ticket => ticket.waitSeconds).length;
         }
     },
     methods: {
@@ -132,19 +121,6 @@ export default {
                 this.isPassoff = false;
             }
         },
-        // submitTicket() {
-        //     this.$root.$data.myTicket = {
-        //         id: this.getId(),
-        //         name: this.$root.$data.user,
-        //         enterTime: moment().format(),
-        //         waitSeconds: 0,
-        //         helpedSeconds: 0,
-        //         helpedBy: "",
-        //         isPassoff: this.isPassoff,
-        //         question: this.question,
-        //     }
-        //     this.$root.$data.queue.push(this.$root.$data.myTicket);
-        // },
         async updateStats() {
             let res = await axios.get('/api/queue/stats');
             this.avgWaitSeconds = res.data.averageWait;
@@ -161,12 +137,14 @@ export default {
             this.place = res.data.place;
             this.question = "";
             this.isPassoff = false;
+            this.fromSeconds = 0;
         },
         async updateTicket() {
             try {
                 let res = await axios.get('/api/queue/' + this.$root.$data.myTicket._id);
                 this.$root.$data.myTicket = res.data.ticket;
                 this.place = res.data.place;
+                this.fromSeconds = Math.floor(moment().diff(moment(this.$root.$data.myTicket.enterTime)) / 1000) - this.$root.$data.myTicket.waitSeconds;
             } catch (error) {
                 if (error.response.status === 404) {
                     this.$root.$data.myTicket = undefined;
@@ -176,24 +154,10 @@ export default {
             }
             
         }
-        // getId() {
-        //     let newId = this.$root.$data.nextId;
-        //     this.$root.$data.nextId++;
-        //     return newId;
-        // },
-        // updateFrom() {
-        //     if (this.status === 'waiting' || this.status === 'helped') {
-        //         this.fromSeconds = Math.floor(moment().diff(moment(this.$root.$data.myTicket.enterTime)) / 1000) - this.$root.$data.myTicket.waitSeconds;
-        //     }
-        // },
-        // updateAvgWait() {
-        //     this.avgWait = this.$root.$data.queue.filter(ticket => !ticket.waitSeconds > 0).reduce((avg, ticket, i, src) => {
-        //         return avg + ((Math.floor(moment().diff(moment(ticket.enterTime)) / 1000)) / src.length);
-        //     }, 0)
-        // },
     },
     created() {
         this.updateStats();
+        if (this.$root.$data.myTicket) { this.updateTicket(); }
         this.interval = setInterval(() => {
             this.updateStats();
             if (this.status === "waiting" || this.status === "helped") {
@@ -201,7 +165,7 @@ export default {
             }
         },5000);
         this.waitInterval = setInterval(() => {
-            this.avgWaitSeconds++;
+            if (this.waiting) { this.avgWaitSeconds++; }
             this.fromSeconds++;
         },1000);
     },
