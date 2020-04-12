@@ -148,9 +148,6 @@ export default {
             } catch (error) {
                 if (error.response.status === 404) {
                     this.$root.$data.myTicket = undefined;
-                } else {
-                    console.log(error);
-                }
             }
             
         }
