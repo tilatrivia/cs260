@@ -23,7 +23,7 @@
 
         <div class="footer">
             <p>Made by Truman Kautzman.</p>
-            <p>Source found on <a href="https://github.com/tilatrivia/cs260/tree/master/project3">GitHub</a>.</p>
+            <p>Source found on <a href="https://github.com/tilatrivia/cs260/tree/master/project4">GitHub</a>.</p>
         </div>
     </div>
 </template>
